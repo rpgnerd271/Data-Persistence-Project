@@ -12,24 +12,41 @@ using TMPro;
 public class MainMenuUI : MonoBehaviour
 {
     [SerializeField] TMP_InputField inputName;
-    public static string playerName;
+    public static string userName;
+
+    [SerializeField] TextMeshProUGUI bestScoreText;
+
+    private void Awake()
+    {
+        if (!string.IsNullOrEmpty(SaveName.saveName.playerName))
+        {
+            inputName.text = SaveName.saveName.playerName;
+        }
+        SaveName.saveName.LoadBestScore();
+        bestScoreText.text = "Best Score: \n" + SaveName.saveName.bestPlayerName + " " + SaveName.saveName.bestScore;
+    }
     // Start is called before the first frame update
     void Start()
     {
-        
+        userName = inputName.text;
     }
 
     // Update is called once per frame
     void Update()
     {
-        playerName = inputName.text;
-        Debug.Log(playerName);
+        userName = inputName.text;
+        //Debug.Log(playerName);
     }
 
     public void StartNew()
     {
-        DontDestroyOnLoad(inputName);
-        SceneManager.LoadScene(1);
+        //DontDestroyOnLoad(inputName);
+        SaveName.saveName.playerName = userName;
+        if (!string.IsNullOrEmpty(SaveName.saveName.playerName))
+        {
+            SceneManager.LoadScene(1);
+        }
+        
     }
 
     public void Exit()
